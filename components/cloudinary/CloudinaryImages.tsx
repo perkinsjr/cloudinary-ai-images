@@ -12,42 +12,49 @@ export const CloudinaryImage = () => {
   const [transform, setTransform] = useState("")
 
   async function transformImage() {
-    const newImage = await transformImageAction({ transformRequest: transform, originalImage: image });
+    const newImage = await transformImageAction({ transformRequest: transform, originalImage: image.secure_url });
     if (newImage) {
       setNewImage(newImage);
     }
   }
+
+  async function handleOnSubmit(e) {
+    e.preventDefault();
+    await transformImage();
+  }
+
   return (
     <div>
       {!image && (
         <CloudinaryUpload handleImage={setImage} />
       )}
       {image && !newImage && (
-        <>
+        <form onSubmit={handleOnSubmit} className="max-w-md">
           <CldImage
-            width="600"
-            height="600"
-            src={"https://res.cloudinary.com/dub20ptvt/image/upload/v1686054889/xwkypizrao07ndiwvgck.png"}
+            width={image.width}
+            height={image.height}
+            src={image.secure_url}
             preserveTransformations
             alt="Description of my image"
+            sizes="(min-width: 500px) 50vw, (max-width: 500px) 100vw"
           />
-          <Input type="text" disabled={true} value={image} onChange={(e) => setImage(e.target.value)} />
+          <Input className="mt-4" type="text" disabled={true} value={image.secure_url} onChange={(e) => setImage(e.target.value)} />
           <Input className="mt-4" type="text" value={transform} onChange={(e) => setTransform(e.target.value)} />
-          <Button
-            className="mt-4"
-            onClick={transformImage}> Transform </Button>
-        </>
+          <Button className="mt-4">Transform</Button>
+        </form>
       )}
       {newImage && (
-        <>
+        <div className="max-w-md">
           <Image
-            width="600"
-            height="600"
+            width={image.width}
+            height={image.height}
             src={newImage}
             alt="Description of my image"
+            sizes="(min-width: 500px) 50vw, (max-width: 500px) 100vw"
           />
-          <Button onClick={() => setNewImage("")}> Revert </Button>
-        </>
+          <Input className="mt-4" type="text" disabled={true} value={newImage} />
+          <Button className="mt-4" onClick={() => setNewImage("")}> Revert </Button>
+        </div>
       )}
     </div>
   )

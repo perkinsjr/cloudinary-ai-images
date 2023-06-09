@@ -7,10 +7,10 @@ export const CloudinaryUpload = (props) => {
   return (
     <CldUploadButton className={buttonVariants({ size: 'lg' })}
       onUpload={(cloudinary, widget) => {
-        props.handleImage(cloudinary.info.secure_url)
+        props.handleImage(cloudinary.info)
         widget.close()
       }}
-      uploadPreset="c4mbxp3q">
+      uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}>
       Upload your image
     </CldUploadButton>
   )
