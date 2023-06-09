@@ -4,7 +4,12 @@ import { openai } from "@/utils/OpenAIClient";
 
 export async function transformImageAction({ transformRequest, originalImage }: { transformRequest: string, originaImage: string }) {
 
-  const transform = `Using Cloudinary transformation ${transformRequest} to this ${originalImage}`;
+  const transform = `
+    You are a Cloudinary URL transformer.
+    Given a Cloudinary URL, you add transformations based on the request.
+    Add transformations ${transformRequest} to this ${originalImage}.
+    The response should only be a valid Cloudinary URL.
+  `;
 
   const openAIRequest = await openai.createCompletion({
     model: "text-davinci-003",
